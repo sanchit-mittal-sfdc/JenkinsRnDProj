@@ -16,7 +16,7 @@ node {
     // Check Salesforce CLI Version
     stage('Check SFDX CLI Version') {
         echo 'Checking Salesforce CLI (SFDX) version...'
-        def versionOutput = sh(returnStdout: true, script: "${toolbelt}/sfdx --version").trim()
+        def versionOutput = sh(returnStdout: true, script: "${toolbelt}/sf --version").trim()
         echo "SFDX CLI Version: ${versionOutput}"
     }
 
@@ -29,9 +29,9 @@ node {
     withEnv(["HOME=${env.WORKSPACE}"]) {
         withCredentials([file(credentialsId: SERVER_KEY_CREDENTALS_ID, variable: 'server_key_file')]) {
 
-            // Authorize DevHub
-            stage('Authorize DevHub') {
-                executeCommand("${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${server_key_file} --set-default-dev-hub --alias HubOrg", 'Salesforce DevHub authorization failed.')
+            // Authorize Dev10 Org
+            stage('Authorize Dev10 Org') {
+                executeCommand("${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${server_key_file}", 'Salesforce Org authorization failed.')
             }
 
             // Additional stages can go here...

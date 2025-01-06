@@ -31,12 +31,12 @@ node {
 
             // Authorize Dev10 Org
             stage('Authorize Dev10 Org') {
-                // Use the withEnv block to pass the server_key_file to the Salesforce CLI
-                withEnv(["SFDX_KEY_FILE=${server_key_file}"]) {
-                    sh """
-                        ${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${SFDX_KEY_FILE} --no-prompt
-                    """
-                }
+                // Move the key file to a known location and ensure it can be accessed
+                sh """
+                    mkdir -p ${WORKSPACE}/jwt
+                    cp ${server_key_file} ${WORKSPACE}/jwt/server_key.pem
+                    ${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${WORKSPACE}/jwt/server_key.pem --no-prompt
+                """
             }
 
             // Additional stages can go here...

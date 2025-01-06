@@ -4,7 +4,7 @@ node {
     def SERVER_KEY_CREDENTALS_ID = env.SERVER_KEY_CREDENTALS_ID
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
     
-    def toolbelt = tool 'toolbelt' // Ensure toolbelt points to SFDX path
+    def toolbelt = tool 'toolbelt' // Ensure toolbelt points to SFDX path 'usr/local/bin' use command 'which sf' in terminal 
 
     // Stage to check Salesforce CLI version
     stage('Check SFDX CLI Version') {

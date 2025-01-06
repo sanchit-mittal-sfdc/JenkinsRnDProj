@@ -13,16 +13,26 @@ node {
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
     def toolbelt = tool 'toolbelt' // Custom tool pointing to /usr/local/bin/sfdx
 
+    // Checkout Source Code with GitHub Credentials
+    stage('Checkout Source') {
+        withCredentials([string(credentialsId: 'github-access-token', variable: 'GITHUB_TOKEN')]) {
+            echo 'Checking out source code using authenticated GitHub access...'
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: '*/master']], // Using master branch
+                userRemoteConfigs: [[
+                    url: 'https://github.com/sanchit-mittal-sfdc/JenkinsRnDProj.git', // Your public repo URL
+                    credentialsId: 'github-access-token'
+                ]]
+            ])
+        }
+    }
+
     // Check Salesforce CLI Version
     stage('Check SFDX CLI Version') {
         echo 'Checking Salesforce CLI (SFDX) version...'
         def versionOutput = sh(returnStdout: true, script: "${toolbelt}/sf --version").trim()
         echo "SFDX CLI Version: ${versionOutput}"
-    }
-
-    // Checkout Source Code
-    stage('Checkout Source') {
-        checkout scm
     }
 
     // Use Salesforce JWT credentials

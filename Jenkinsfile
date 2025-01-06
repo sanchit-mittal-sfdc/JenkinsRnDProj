@@ -31,17 +31,13 @@ node {
 
             // Authorize Dev10 Org
             stage('Authorize Dev10 Org') {
-                executeCommand("${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${server_key_file}", 'Salesforce Org authorization failed.')
+                // Execute the Salesforce login command
+                sh """
+                    ${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${server_key_file}
+                """
             }
 
             // Additional stages can go here...
         }
-    }
-}
-
-// Helper Methods
-def executeCommand(command, errorMessage) {
-    if (command("${command}") != 0) {
-        error errorMessage
     }
 }
